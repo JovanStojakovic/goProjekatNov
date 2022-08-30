@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -22,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server := Service{
+	server := configStore{
 		store: store,
 	}
 
