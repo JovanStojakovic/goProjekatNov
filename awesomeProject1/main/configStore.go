@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/hashicorp/consul/api"
 	"os"
 	"reflect"
@@ -29,27 +28,6 @@ func New() (*ConfigStore, error) {
 	return &ConfigStore{
 		cli: client,
 	}, nil
-}
-
-func (cs *ConfigStore) CheckId(reqId string) bool {
-	kv := cs.cli.KV()
-	k, _, err := kv.Get(reqId, nil)
-	if err == nil || k != nil {
-		return true
-	}
-	return false
-
-}
-
-func (cs *ConfigStore) SaveId() string {
-	kv := cs.cli.KV()
-	idempotencyId := uuid.New().String()
-	p := &api.KVPair{Key: idempotencyId, Value: nil}
-	_, err := kv.Put(p, nil)
-	if err != nil {
-		return "error"
-	}
-	return idempotencyId
 }
 
 func (cs *ConfigStore) GetAllConfigs() ([]*Config, error) {
